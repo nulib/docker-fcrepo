@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DOCKER_REPO=${DOCKER_REPO:-nulib/fcrepo4}
+
+RELEASES=$(curl --silent -f -lSL 'https://api.github.com/repos/fcrepo4/fcrepo4/releases?per_page=50' \
+            | jq -r '.[].tag_name' \
+            | cut -d '-' -f 2-)
+TO_BUILD=""
+for v in $RELEASES; do
+  if [[ "$v" < "4.7.0" ]]; then
+    echo "Cannot build release ${v} because it is < 4.7.0"
+  else
+    docker build --build-arg FCREPO_VERSION=$v -t $DOCKER_REPO:$v .
+  fi
+done
+echo "To Build: $TO_BUILD"

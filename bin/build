@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DOCKER_REPO=${DOCKER_REPO:-nulib/fcrepo4}
+
+function latest_release() {
+  curl -s -H accept:application/vnd.github.v3+json https://api.github.com/repos/fcrepo4/fcrepo4/releases/latest | jq -r '.tag_name | split("-") | last'
+}
+
+FCREPO_VERSION=${1:-$(latest_release)}
+if [[ "$FCREPO_VERSION" < "4.7.0" ]]; then
+  echo "Cannot build release $FCREPO_VERSION – must be 4.7.0 or higher"
+  exit 1
+fi
+echo -n 'Building release: '
+echo $FCREPO_VERSION
+docker build --build-arg FCREPO_VERSION=$FCREPO_VERSION -t $DOCKER_REPO:$FCREPO_VERSION .
