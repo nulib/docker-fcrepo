@@ -26,11 +26,11 @@ bin/build VERSION
 Example:
 
 ```bash
-bin/build 5.1.0 # Produces an image tagged nulib/fcrepo4:5.1.0
+bin/build 5.1.0 # Produces an image tagged samvera/fcrepo4:5.1.0
 ```
 
 If you'd like to use something other than the default target repository 
-(`nulib/fcrepo4`), set the `DOCKER_REPO` variable:
+(`samvera/fcrepo4`), set the `DOCKER_REPO` variable:
 
 ```bash
 DOCKER_REPO=foo/bar bin/build 5.1.0 # Produces an image tagged foo/bar:5.1.0

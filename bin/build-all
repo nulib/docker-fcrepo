@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKER_REPO=${DOCKER_REPO:-nulib/fcrepo4}
+DOCKER_REPO=${DOCKER_REPO:-samvera/fcrepo4}
 
 RELEASES=$(curl --silent -f -lSL 'https://api.github.com/repos/fcrepo4/fcrepo4/releases?per_page=50' \
             | jq -r '.[].tag_name' \
