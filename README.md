@@ -2,8 +2,8 @@
 
 ## What
 
-Tools and scripts for building [Docker](https://docker.io/) images for 
-[Fedora Repository](https://github.com/fcrepo4/fcrepo4) v4.7.0 and up.
+Tools and scripts for building [Docker](https://docker.io/) images for
+all releases of [Fedora](https://github.com/fcrepo4/fcrepo4) version 4 and up.
 
 ## Why
 
@@ -29,7 +29,7 @@ Example:
 bin/build 5.1.0 # Produces an image tagged samvera/fcrepo4:5.1.0
 ```
 
-If you'd like to use something other than the default target repository 
+If you'd like to use something other than the default target repository
 (`samvera/fcrepo4`), set the `DOCKER_REPO` variable:
 
 ```bash
@@ -38,8 +38,7 @@ DOCKER_REPO=foo/bar bin/build 5.1.0 # Produces an image tagged foo/bar:5.1.0
 
 ### Build all versions
 
-To create an image for every [fcrepo4 release](https://github.com/fcrepo4/fcrepo4/releases) 
-4.7.0 and later, run
+To create an image for every [fcrepo4 release](https://github.com/fcrepo4/fcrepo4/releases), run
 
 ```bash
 bin/build-all

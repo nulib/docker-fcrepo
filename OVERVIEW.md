@@ -2,7 +2,8 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/samvera/fcrepo4.svg?maxAge=604800)](https://hub.docker.com/r/samvera/fcrepo4)
 
-This Docker repository contains tagged images for [Fedora](https://wiki.duraspace.org/display/FF/Fedora+Repository+Home) [releases](https://github.com/fcrepo4/fcrepo4/releases) from v4.7.0 onward.
+This Docker repository contains tagged images for all [Fedora](https://wiki.duraspace.org/display/FF/Fedora+Repository+Home)
+[releases](https://github.com/fcrepo4/fcrepo4/releases) version 4 and up.
 
 ## Usage
 
