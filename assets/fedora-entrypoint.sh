@@ -27,6 +27,12 @@ if [[ $MEM_BYTES -ne "9223372036854771712" ]]; then
   echo "Setting -Xmx${MX}m"
   JAVA_OPTIONS="${JAVA_OPTIONS} -Xmx${MX}m"
 fi
-MODESHAPE_CONFIG=${MODESHAPE_CONFIG:-classpath:/config/file-simple/repository.json}
+
+DEFAULT_CONFIG="file-simple"
+if [[ "$FCREPO_VERSION" < "4.7.0" ]]; then
+  DEFAULT_CONFIG="minimal-default"
+fi
+
+MODESHAPE_CONFIG=${MODESHAPE_CONFIG:-classpath:/config/${DEFAULT_CONFIG}/repository.json}
 export JAVA_OPTIONS="${JAVA_OPTIONS} -Dfcrepo.home=/data -Dfcrepo.modeshape.configuration=${MODESHAPE_CONFIG}"
-su -c "exec /docker-entrypoint.sh $@" jetty
+su -s /bin/ash -c "exec /docker-entrypoint.sh $@" jetty

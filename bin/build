@@ -7,10 +7,6 @@ function latest_release() {
 }
 
 FCREPO_VERSION=${1:-$(latest_release)}
-if [[ "$FCREPO_VERSION" < "4.7.0" ]]; then
-  echo "Cannot build release $FCREPO_VERSION – must be 4.7.0 or higher"
-  exit 1
-fi
 echo -n 'Building release: '
 echo $FCREPO_VERSION
 docker build --build-arg FCREPO_VERSION=$FCREPO_VERSION -t $DOCKER_REPO:$FCREPO_VERSION .

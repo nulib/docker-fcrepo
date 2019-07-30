@@ -7,11 +7,7 @@ RELEASES=$(curl --silent -f -lSL 'https://api.github.com/repos/fcrepo4/fcrepo4/r
             | cut -d '-' -f 2-)
 TO_BUILD=""
 for v in $RELEASES; do
-  if [[ "$v" < "4.7.0" ]]; then
-    echo "Cannot build release ${v} because it is < 4.7.0"
-  else
-    clear
-    echo "Building release ${v}"
-    docker build --build-arg FCREPO_VERSION=$v -t $DOCKER_REPO:$v .
-  fi
+  clear
+  echo "Building release ${v}"
+  docker build --build-arg FCREPO_VERSION=$v -t $DOCKER_REPO:$v .
 done
