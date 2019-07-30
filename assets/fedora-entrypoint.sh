@@ -15,6 +15,12 @@ if [[ ! -e /sys/fs/cgroup/memory/${MEM_FILE} ]]; then
   exit 1
 fi
 
+if [[ -d /jetty-overrides ]]; then
+  cd /jetty-overrides
+  for file in $(find . -type f); do cp $file ${JETTY_BASE}/$file; done
+  cd -
+fi
+
 MEM_BYTES=$(cat /sys/fs/cgroup/memory/${MEM_FILE})
 if [[ $MEM_BYTES -ne "9223372036854771712" ]]; then
   let "MX=$MEM_BYTES * 8 / 10 / 1024 / 1024"
@@ -22,5 +28,5 @@ if [[ $MEM_BYTES -ne "9223372036854771712" ]]; then
   JAVA_OPTIONS="${JAVA_OPTIONS} -Xmx${MX}m"
 fi
 MODESHAPE_CONFIG=${MODESHAPE_CONFIG:-classpath:/config/file-simple/repository.json}
-export JAVA_OPTIONS="${JAVA_OPTIONS} -Dfcrepo-users=${JETTY_BASE}/fedora/fcrepo-realm.properties -Dfcrepo.home=/data -Dfcrepo.modeshape.configuration=${MODESHAPE_CONFIG}"
+export JAVA_OPTIONS="${JAVA_OPTIONS} -Dfcrepo.home=/data -Dfcrepo.modeshape.configuration=${MODESHAPE_CONFIG}"
 su -c "exec /docker-entrypoint.sh $@" jetty

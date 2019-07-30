@@ -1,15 +1,19 @@
-FROM        jetty:jre8
+FROM        openjdk:8 as warfile
 ARG         FCREPO_VERSION=""
 RUN         bash -c 'if [[ "$FCREPO_VERSION" < "4.7" ]]; then echo "Cannot build fcrepo4 v${FCREPO_VERSION}"; exit 1; fi'
-ARG         FEDORA_LOCATION=https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-${FCREPO_VERSION}/fcrepo-webapp-${FCREPO_VERSION}.war
-ADD         ${FEDORA_LOCATION} ${JETTY_BASE}/fedora/fedora.war
+RUN         mkdir -p /build/unpack
+WORKDIR     /build/unpack
+ADD         https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-${FCREPO_VERSION}/fcrepo-webapp-${FCREPO_VERSION}.war /build/fedora.war
+RUN         jar -xf ../fedora.war
+ADD         https://raw.githubusercontent.com/fcrepo4/fcrepo4/fcrepo-${FCREPO_VERSION}/fcrepo-webapp/src/main/jetty-console/WEB-INF/web.xml WEB-INF/web.xml
+RUN         jar -cf ../fedora.war .
+
+FROM        jetty:jre8
+COPY        --from=warfile /build/fedora.war ${JETTY_BASE}/fedora/fedora.war
+COPY        --from=warfile /build/unpack/WEB-INF/web.xml ${JETTY_BASE}/fedora/override-web.xml
 ADD         assets/fedora.xml ${JETTY_BASE}/webapps/fedora.xml
-ADD         assets/jetty.xml ${JETTY_HOME}/etc/jetty.xml
-ADD         assets/override-web.xml ${JETTY_BASE}/fedora/override-web.xml
 USER        root
-ENV         FEDORA_ADMIN_USER=fedoraAdmin FEDORA_ADMIN_PASS=fedoraAdmin
-RUN         echo "${FEDORA_ADMIN_USER}: MD5:$(echo -n ${FEDORA_ADMIN_PASS} | md5sum | awk '{ print $1 }'),fedoraAdmin" > ${JETTY_BASE}/fedora/fcrepo-realm.properties
-RUN         mkdir -p /data
+RUN         mkdir -p /data ${JETTY_BASE}/etc ${JETTY_BASE}/modules
 RUN         /bin/chown -R jetty:jetty ${JETTY_BASE}/fedora/
 EXPOSE      8080 61613 61616
 ADD         assets/fedora-entrypoint.sh /
