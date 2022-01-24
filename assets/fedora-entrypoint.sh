@@ -37,4 +37,4 @@ fi
 
 MODESHAPE_CONFIG=${MODESHAPE_CONFIG:-classpath:/config/${DEFAULT_CONFIG}/repository.json}
 export JAVA_OPTIONS="${JAVA_OPTIONS} -Dfcrepo.home=/data -Dfcrepo.modeshape.configuration=${MODESHAPE_CONFIG}"
-su -s /bin/ash -c "exec /docker-entrypoint.sh $@" jetty
+su -s /bin/bash -c "exec /docker-entrypoint.sh $@" jetty
