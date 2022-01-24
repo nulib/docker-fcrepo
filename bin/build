@@ -9,4 +9,5 @@ function latest_release() {
 FCREPO_VERSION=${1:-$(latest_release)}
 echo -n 'Building release: '
 echo $FCREPO_VERSION
-docker build --build-arg FCREPO_VERSION=$FCREPO_VERSION -t $DOCKER_REPO:$FCREPO_VERSION .
+docker buildx create --use
+docker buildx build --push --platform linux/amd64,linux/arm64 --build-arg FCREPO_VERSION=$FCREPO_VERSION -t $DOCKER_REPO:$FCREPO_VERSION .
