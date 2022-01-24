@@ -13,8 +13,7 @@ for MEM_FILE in memory.max memory/memory.limit_in_bytes memory/memory.memsw.limi
 done
 
 if [[ ! -e /sys/fs/cgroup/${MEM_FILE} ]]; then
-  echo "Could not read container memory. Exiting."
-  exit 1
+  echo "Could not read container memory."
 fi
 
 if [[ -d /jetty-overrides ]]; then
@@ -24,7 +23,7 @@ if [[ -d /jetty-overrides ]]; then
 fi
 
 MEM_BYTES=$(cat /sys/fs/cgroup/${MEM_FILE})
-if [[ $MEM_BYTES -ne "max" && $MEM_BYTES -ne "9223372036854771712" ]]; then
+if [[ -e /sys/fs/cgroup/${MEM_FILE} && $MEM_BYTES -ne "max" && $MEM_BYTES -ne "9223372036854771712" ]]; then
   let "MX=$MEM_BYTES * 8 / 10 / 1024 / 1024"
   echo "Setting -Xmx${MX}m"
   JAVA_OPTIONS="${JAVA_OPTIONS} -Xmx${MX}m"
